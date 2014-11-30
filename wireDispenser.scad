@@ -1,5 +1,7 @@
+/* ==================================*/
 // --- OBJECT DIA AND SETTINGS ---
-// reel info
+
+// Reel Info
 reelOD = 70; // reel outer diameter
 reelID = 25; // reel inner diameter
 reelW = 31; // reel width
@@ -7,26 +9,29 @@ dowelOD = 18; // supporting dowel outer dia
 buffer = 10; // buffer around the edges of reels
 trim = 3/4; // trim to height by this fraction since the reels don't need to be full enclosed
 
-// reel settings
+// Reel Settings
 noReels = 6; // number of wire reels to hold
 reelSpacing = 1; // buffer between reels
 wireDia = 2; // dia of wire
 
 spacing = 2; // spacing between dxf export for print
 
-// slot
-/* dentLength = 10;*/ // now calculated
+// Slot
 // Tweak these till it looks right
 baseSlots = 24; // number of slots in base
 sideSlots = 8; // number of slots on sides
+
 // Laser cutter beam kerf
 LaserBeamDiameter = 0.23;
 // Material characteristic
 materialThickness = 3.20;
 
-// --- COMPILE ----
+// --- COMPILE SETTING ----
 // make export true if you want to create DXF print sheet, otherwise 3D render is created to visualise
 export = false;
+
+// --- SETTINGS END --- 
+/* ========================*/
 
 // --- WORKING ----
 height = reelOD + (reelID - dowelOD) + buffer*2 + LaserBeamDiameter;
@@ -40,7 +45,7 @@ dentLength = (length / baseSlots);
 dentSpacing = dentLength; // same as dentLength (too lazy to change code!)
 endSpace = width+spacing+materialThickness;
 
-// --- EXPORT SETTIGS --- 
+// --- BUILD --- 
 if (export) {
   projection() base();
   projection() translate([materialThickness,endSpace]) end();
@@ -66,8 +71,9 @@ if (export) {
 }
 
 
-// --- END EXPORT ---
+// --- END BUILD ---
 
+// Base Piece
 module base() {
   difference() {
     cube([length,width,materialThickness]);
@@ -82,6 +88,7 @@ module base() {
   }
 }
 
+// End piece
 module end() {
   widthEnd = width-materialThickness*2;
   sideSpacing = (trimedHeight/sideSlots);
@@ -97,6 +104,7 @@ module end() {
     }
 }
 
+// Piece for dowel
 module dowelSlot() {
   widthEnd = width-materialThickness*2;
   difference() {
@@ -108,6 +116,7 @@ module dowelSlot() {
   }
 }
 
+// Sides
 module side(dispensing) {
   widthEnd = width-materialThickness*2;
   sideSpacing = (trimedHeight/sideSlots);
@@ -128,6 +137,7 @@ module side(dispensing) {
   }
 }
 
+// Creates dents
 module dent(direction) {
   if (direction == 1) {
     cube([dentLength-LaserBeamDiameter,materialThickness-LaserBeamDiameter/2,materialThickness*2], center=true);
@@ -140,6 +150,7 @@ module dent(direction) {
   }
 }
 
+// Creates teeth
 module tooth(direction) {
   if (direction == 1) {
     cube([dentLength+LaserBeamDiameter,materialThickness+LaserBeamDiameter/2,materialThickness], center=true);
@@ -150,6 +161,7 @@ module tooth(direction) {
   }
 }
 
+// Slots for wires to exit
 module wireGroove(number) {
   grooveLength = reelW*0.25;
   for (x = [0:number-1]) {
