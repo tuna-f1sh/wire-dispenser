@@ -26,7 +26,7 @@ materialThickness = 3.20;
 
 // --- COMPILE ----
 // make export true if you want to create DXF print sheet, otherwise 3D render is created to visualise
-export = 0;
+export = false;
 
 // --- WORKING ----
 height = reelOD + (reelID - dowelOD) + buffer*2 + LaserBeamDiameter;
