@@ -7,7 +7,7 @@ reelID = 25; // reel inner diameter
 reelW = 31; // reel width
 dowelOD = 18; // supporting dowel outer dia
 buffer = 10; // buffer around the edges of reels
-trim = 3/4; // trim to height by this fraction since the reels don't need to be full enclosed
+trim = 3/4; // trim to height by this fraction since the reels don't need to be fully enclosed
 
 // Reel Settings
 noReels = 6; // number of wire reels to hold
@@ -107,9 +107,11 @@ module end() {
 // Piece for dowel
 module dowelSlot() {
   widthEnd = width-materialThickness*2;
+  // position of dowel accounts for egcentric reel position
+  position = (reelID - dowelOD) + (dowelOD / 2) + (reelOD - reelID) - buffer;
   difference() {
     end();
-    translate([height/2,widthEnd/2]) {
+    translate([position,widthEnd/2]) {
       cylinder(h = materialThickness, r = dowelOD/2+LaserBeamDiameter);
       translate([trimedHeight/4+LaserBeamDiameter,0,materialThickness/2]) cube([trimedHeight/2,dowelOD+LaserBeamDiameter,materialThickness*2],center=true);
     }
